@@ -1,0 +1,45 @@
+import streamlit as st
+import json
+import random
+
+# Load sample skill data
+with open("skill_data.json", "r") as f:
+    skill_data = json.load(f)
+
+st.set_page_config(page_title="Skill Decay Tracker", page_icon="📊", layout="wide")
+
+st.title("📊 SkillDecayTracker Prototype")
+st.write("Track skill demand trends and discover your next learning pathway.")
+
+# Input section
+user_skills = st.text_input("Enter your current skills (comma separated):")
+career_goal = st.text_input("Enter your career goal (e.g., AI Engineer, Web Developer):")
+
+if st.button("Analyze My Skills"):
+    if user_skills.strip() == "":
+        st.warning("Please enter at least one skill.")
+    else:
+        skills = [s.strip().title() for s in user_skills.split(",")]
+        st.subheader("🧠 Skill Demand Analysis")
+        for skill in skills:
+            if skill in skill_data:
+                info = skill_data[skill]
+                st.markdown(f"**{skill}** — Trend: {info['trend']} ({info['growth']})")
+                st.markdown(f"Suggested Skills to Learn Next: {', '.join(info['suggest'])}")
+                st.progress(random.uniform(0.3, 0.9))
+                st.write("---")
+            else:
+                st.markdown(f"**{skill}** — No data available (new or niche skill).")
+                st.progress(random.uniform(0.2, 0.5))
+                st.write("---")
+
+        st.subheader("🎯 Personalized Learning Roadmap")
+        st.markdown(f"Based on your goal *{career_goal}*, start with:")
+        st.markdown("""
+        1. Strengthen one **core skill** (take an advanced course).
+        2. Pick one **suggested adjacent skill** and make a mini-project.
+        3. Join 1–2 relevant online communities (e.g., Reddit, Discord, Kaggle).
+        4. Track demand every 3 months using SkillDecayTracker alerts.
+        """)
+
+        st.success("✅ Analysis complete! Keep upgrading your skills to stay future-proof.")
