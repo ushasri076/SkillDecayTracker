@@ -1,3 +1,4 @@
+ HEAD
 # SkillDecayTracker (Prototype)
 
 A working Streamlit prototype that simulates skill demand trends and recommends adjacent skills and a simple learning roadmap.
@@ -26,3 +27,7 @@ A working Streamlit prototype that simulates skill demand trends and recommends 
 ## Notes
 - The trend chart is simulated from simple growth percentages and random noise — intended for demo purposes.
 - To convert this to a real system, integrate real-time data ingestion, NLP-based skill extraction, and forecasting models.
+=======
+# SkillDecayTracker
+Skill decay Tracker for Hackathon
+>>>>>>> 498961331d1f9c85d6304979815357f5f8352db8
