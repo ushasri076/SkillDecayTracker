@@ -1,0 +1,57 @@
+{
+  "Python": {
+    "trend": "Rising",
+    "growth": "+14%",
+    "growth_pct": 0.14,
+    "suggest": [
+      "Machine Learning",
+      "Data Science",
+      "FastAPI"
+    ]
+  },
+  "Java": {
+    "trend": "Stable",
+    "growth": "+2%",
+    "growth_pct": 0.02,
+    "suggest": [
+      "Spring Boot",
+      "Kotlin"
+    ]
+  },
+  "C++": {
+    "trend": "Declining",
+    "growth": "-8%",
+    "growth_pct": -0.08,
+    "suggest": [
+      "Rust",
+      "Go"
+    ]
+  },
+  "React": {
+    "trend": "Rising",
+    "growth": "+11%",
+    "growth_pct": 0.11,
+    "suggest": [
+      "Next.js",
+      "TypeScript"
+    ]
+  },
+  "SQL": {
+    "trend": "Stable",
+    "growth": "+3%",
+    "growth_pct": 0.03,
+    "suggest": [
+      "NoSQL",
+      "Data Warehousing"
+    ]
+  },
+  "Kotlin": {
+    "trend": "Rising",
+    "growth": "+9%",
+    "growth_pct": 0.09,
+    "suggest": [
+      "Android Compose",
+      "Coroutines"
+    ]
+  }
+}
