@@ -1,57 +1,21 @@
 {
-  "Python": {
-    "trend": "Rising",
-    "growth": "+14%",
-    "growth_pct": 0.14,
-    "suggest": [
-      "Machine Learning",
-      "Data Science",
-      "FastAPI"
-    ]
-  },
-  "Java": {
-    "trend": "Stable",
-    "growth": "+2%",
-    "growth_pct": 0.02,
-    "suggest": [
-      "Spring Boot",
-      "Kotlin"
-    ]
-  },
-  "C++": {
-    "trend": "Declining",
-    "growth": "-8%",
-    "growth_pct": -0.08,
-    "suggest": [
-      "Rust",
-      "Go"
-    ]
-  },
-  "React": {
-    "trend": "Rising",
-    "growth": "+11%",
-    "growth_pct": 0.11,
-    "suggest": [
-      "Next.js",
-      "TypeScript"
-    ]
-  },
-  "SQL": {
-    "trend": "Stable",
-    "growth": "+3%",
-    "growth_pct": 0.03,
-    "suggest": [
-      "NoSQL",
-      "Data Warehousing"
-    ]
-  },
-  "Kotlin": {
-    "trend": "Rising",
-    "growth": "+9%",
-    "growth_pct": 0.09,
-    "suggest": [
-      "Android Compose",
-      "Coroutines"
-    ]
-  }
+  "Python": {"trend":"Rising","growth":"+14%","growth_pct":0.14,"last_used":"2025-10-05","suggest":["Machine Learning","Data Science","FastAPI"]},
+  "C": {"trend":"Stable","growth":"+3%","growth_pct":0.03,"last_used":"2025-07-12","suggest":["Embedded Systems","C++"]},
+  "C++": {"trend":"Declining","growth":"-8%","growth_pct":-0.08,"last_used":"2025-06-30","suggest":["Rust","Go"]},
+  "Java": {"trend":"Stable","growth":"+2%","growth_pct":0.02,"last_used":"2025-09-01","suggest":["Spring Boot","Kotlin"]},
+  "JavaScript": {"trend":"Rising","growth":"+10%","growth_pct":0.10,"last_used":"2025-10-15","suggest":["React","Node.js"]},
+  "DSA": {"trend":"Stable","growth":"+1%","growth_pct":0.01,"last_used":"2025-08-20","suggest":["System Design","Algorithms Practice"]},
+  "SQL": {"trend":"Stable","growth":"+3%","growth_pct":0.03,"last_used":"2025-08-15","suggest":["NoSQL","Data Warehousing"]},
+  "React": {"trend":"Rising","growth":"+11%","growth_pct":0.11,"last_used":"2025-10-20","suggest":["Next.js","TypeScript"]},
+  "Node.js": {"trend":"Rising","growth":"+9%","growth_pct":0.09,"last_used":"2025-09-25","suggest":["Express","API Design"]},
+  "Machine Learning": {"trend":"Rising","growth":"+18%","growth_pct":0.18,"last_used":"2025-10-01","suggest":["Deep Learning","Computer Vision"]},
+  "Deep Learning": {"trend":"Rising","growth":"+16%","growth_pct":0.16,"last_used":"2025-09-10","suggest":["PyTorch","TensorFlow"]},
+  "TensorFlow": {"trend":"Rising","growth":"+12%","growth_pct":0.12,"last_used":"2025-08-05","suggest":["Keras","Model Optimization"]},
+  "Pandas": {"trend":"Rising","growth":"+8%","growth_pct":0.08,"last_used":"2025-10-12","suggest":["NumPy","Data Cleaning"]},
+  "Tableau": {"trend":"Stable","growth":"+4%","growth_pct":0.04,"last_used":"2025-07-05","suggest":["Power BI","Data Visualization"]},
+  "HTML": {"trend":"Stable","growth":"+1%","growth_pct":0.01,"last_used":"2025-09-30","suggest":["CSS","Responsive Design"]},
+  "CSS": {"trend":"Stable","growth":"+1%","growth_pct":0.01,"last_used":"2025-09-28","suggest":["Flexbox","Grid"]},
+  "Git": {"trend":"Rising","growth":"+6%","growth_pct":0.06,"last_used":"2025-10-22","suggest":["GitHub Actions","CI/CD"]},
+  "Communication": {"trend":"Stable","growth":"+2%","growth_pct":0.02,"last_used":"2025-10-10","suggest":["Presentation","Mentoring"]},
+  "Statistics": {"trend":"Rising","growth":"+9%","growth_pct":0.09,"last_used":"2025-08-10","suggest":["Probability","Hypothesis Testing"]}
 }
