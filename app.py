@@ -6,24 +6,24 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title="SkillDecayTracker (Smart Prototype)", page_icon="📊", layout="wide")
 
 # --------------------------
-# Load data
+# Load skill dataset
 # --------------------------
 with open("skill_data.json", "r") as f:
     skill_data = json.load(f)
 
 st.title("📊 SkillDecayTracker — Smart Prototype")
-st.write("Analyze multiple skills at once, view demand trends, and get job-aware recommendations. (Demo data)")
+st.write("Now supports smart mode: enter skills, a job, or both to analyze compatibility, demand, and re-skilling urgency.")
 
 # --------------------------
-# Sidebar controls
+# Sidebar inputs
 # --------------------------
 st.sidebar.header("Controls")
 all_skills = sorted(skill_data.keys())
 selected_for_chart = st.sidebar.multiselect("Select skills to view trend chart", all_skills, default=all_skills[:3])
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("**Analyze skills for a job**")
-job = st.sidebar.text_input("Target job (e.g., Doctor, AI Engineer, Software Developer)", value="AI Engineer")
+st.sidebar.markdown("**Skill & Job Inputs**")
+job = st.sidebar.text_input("Target Job (optional, e.g., AI Engineer, Doctor, Web Developer)")
 user_skills_input = st.sidebar.text_input("Enter your current skills (comma separated)", value="Python, React, SQL")
 
 # --------------------------
@@ -59,14 +59,26 @@ def urgency_score_from_days(days):
 
 # Job to skills mapping
 job_skills = {
-    "doctor": ["biology", "anatomy", "medical research", "diagnosis", "pharmacology", "patient communication", "clinical trials"],
-    "ai engineer": ["python", "machine learning", "deep learning", "pytorch", "tensorflow", "data engineering", "ml ops"],
-    "software developer": ["python", "java", "c++", "dsa", "algorithms", "git", "testing", "system design"],
-    "web developer": ["html", "css", "javascript", "react", "node.js", "next.js", "typescript"],
-    "data analytics": ["sql", "excel", "python", "power bi", "tableau", "statistics", "data cleaning"],
-    "data scientist": ["python", "machine learning", "statistics", "sql", "pandas", "scikit-learn", "deep learning"],
+    "doctor": ["biology", "anatomy", "medical research", "diagnosis", "pharmacology", "patient communication"],
+    "ai engineer": ["python", "machine learning", "deep learning", "pytorch", "tensorflow", "data engineering"],
+    "software developer": ["python", "java", "c++", "dsa", "algorithms", "git", "testing"],
+    "web developer": ["html", "css", "javascript", "react", "node.js", "typescript"],
+    "data analytics": ["sql", "excel", "python", "power bi", "tableau", "statistics"],
+    "data scientist": ["python", "machine learning", "statistics", "sql", "pandas", "deep learning"],
     "teacher": ["communication", "lesson planning", "subject expertise", "assessment", "mentoring"]
 }
+
+# --------------------------
+# Smart mode functions
+# --------------------------
+def suggest_jobs_from_skills(skills):
+    job_matches = []
+    for job, needed in job_skills.items():
+        overlap = len(set([s.lower() for s in skills]) & set([n.lower() for n in needed]))
+        score = overlap / len(needed)
+        if score > 0:
+            job_matches.append((job.title(), score))
+    return sorted(job_matches, key=lambda x: x[1], reverse=True)
 
 def relevance_feedback(skill, job):
     skill_l = skill.lower()
@@ -78,12 +90,12 @@ def relevance_feedback(skill, job):
             if skill_l in s.lower() or s.lower() in skill_l:
                 return "medium", f"⚠️ **{skill}** is somewhat relevant for a {job}."
         suggestions = ", ".join(job_skills[job_l][:4])
-        return "low", f"❌ **{skill}** is not a typical core skill for a {job}. Consider focusing on: {suggestions}."
+        return "low", f"❌ **{skill}** isn’t typical for a {job}. Try focusing on: {suggestions}."
     else:
-        return "unknown", f"ℹ️ I don't have structured data for the job '{job}' yet."
+        return "unknown", f"ℹ️ No data for the job '{job}' yet."
 
 # --------------------------
-# Trend Chart
+# Trend chart
 # --------------------------
 if selected_for_chart:
     months = 12
@@ -103,15 +115,33 @@ if selected_for_chart:
     plt.clf()
 
 # --------------------------
-# Analysis
+# Analysis section
 # --------------------------
-st.header("🧠 Multi-skill Analysis & Job-aware Recommendations")
+st.header("🧠 Smart Skill & Job Analysis")
+
 if st.button("Analyze"):
     skills = [s.strip() for s in user_skills_input.split(",") if s.strip()]
-    if not skills:
-        st.warning("Please enter at least one skill.")
+    job_input = job.strip()
+
+    if not skills and not job_input:
+        st.warning("Please enter at least one skill or a job title.")
+    elif skills and not job_input:
+        st.subheader("💼 Suggested Jobs Based on Your Skills")
+        matches = suggest_jobs_from_skills(skills)
+        if matches:
+            for j, score in matches[:5]:
+                st.markdown(f"- **{j}** — match score: {int(score*100)}%")
+        else:
+            st.info("No strong job matches found for the given skills.")
+    elif job_input and not skills:
+        st.subheader(f"🧩 Core Skills for {job_input.title()}")
+        if job_input.lower() in job_skills:
+            st.markdown(", ".join(job_skills[job_input.lower()]))
+        else:
+            st.info("No data available for this job yet.")
     else:
-        st.subheader("Skill status")
+        # full compatibility mode (same as before)
+        st.subheader(f"🔎 Compatibility Analysis for {job_input}")
         scored = []
         for skill in skills:
             info = skill_data.get(skill, None)
@@ -119,27 +149,15 @@ if st.button("Analyze"):
                 days = days_since(info.get("last_used", ""))
                 urg = urgency_score_from_days(days)
                 growth = info.get("growth", "N/A")
-                st.markdown(f"**{skill}** — Trend: {info.get('trend','N/A')} ({growth}) — Last used: {info.get('last_used','unknown')} — Urgency: {int(urg*100)}%")
-                st.markdown(f"Suggested adjacent skills: {', '.join(info.get('suggest', []))}")
+                st.markdown(f"**{skill}** — Trend: {info.get('trend','N/A')} ({growth}) — Urgency: {int(urg*100)}%")
                 st.progress(min(1.0, urg))
                 scored.append((skill, urg, days or 999))
-                st.write("---")
             else:
-                st.markdown(f"**{skill}** — Not present in demo dataset. Consider adding it to skill_data.json.")
-                st.write("---")
-
-        st.subheader("🎯 Recommended immediate actions")
-        if scored:
-            scored.sort(key=lambda x: (x[1], x[2]), reverse=True)
-            for skill, urg, days in scored[:5]:
-                days_text = f"{days} days inactive" if days != 999 else "unknown last-used"
-                st.markdown(f"- **{skill}** — Urgency: {int(urg*100)}% — {days_text}")
-        else:
-            st.info("No known skills to score from the list provided.")
-
-        st.subheader(f"🔎 Job-aware relevance for: {job}")
+                st.markdown(f"**{skill}** — Not found in dataset.")
+        st.write("---")
+        st.subheader(f"Relevance Feedback for {job_input.title()}")
         for skill in skills:
-            status, msg = relevance_feedback(skill, job)
+            status, msg = relevance_feedback(skill, job_input)
             if status == "high":
                 st.success(msg)
             elif status == "medium":
@@ -149,18 +167,10 @@ if st.button("Analyze"):
             else:
                 st.info(msg)
 
-        st.subheader("📚 Roadmap suggestions (example)")
-        job_l = job.lower().strip()
-        if job_l in job_skills:
-            staples = job_skills[job_l][:4]
-            st.markdown(f"For a **{job}**, focus on: **{', '.join(staples)}**. Start by building one small project combining two of these skills, then publish on GitHub and share for feedback.")
-        else:
-            st.markdown("Unable to show job-specific roadmap — job not in our demo taxonomy. Consider selecting a common job like 'AI Engineer' or 'Web Developer'.")
-
-        st.success("✅ Analysis complete.")
+        st.success("✅ Full compatibility analysis complete!")
 
 # --------------------------
 # Footer
 # --------------------------
 st.markdown("---")
-st.caption("Notes: This demo uses simulated trend curves and a domain mapping for job↔skill relevance. For production, integrate real labor-market signals (job boards, GitHub, Stack Overflow) and an NLP-based skill extractor.")
+st.caption("Smart mode powered demo — detects job↔skill context automatically. For production, connect live APIs for job trends & real market data.")
